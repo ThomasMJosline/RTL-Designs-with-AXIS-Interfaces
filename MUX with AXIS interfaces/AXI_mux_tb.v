@@ -21,7 +21,7 @@ reg [4:0] count_1;
 
 
 
-AXI_mux mux_dut (.ACLK(ACLK), .ARESETn(ARESETn), .DATA_in_0(DATA_in_0), .DATA_in_0(DATA_in_1), .sel(sel), .DATA_out(DATA_out),
+     AXI_mux mux_dut (.ACLK(ACLK), .ARESETn(ARESETn), .DATA_in_0(DATA_in_0), .DATA_in_1(DATA_in_1), .sel(sel), .DATA_out(DATA_out),
 .TVALID_in_0(TVALID_in_0), .TVALID_in_1(TVALID_in_1), .TLAST_in_0(TLAST_in_0), .TLAST_in_1(TLAST_in_1),
 .TREADY_in(TREADY_in), .TREADY_out(TREADY_out), .TVALID_out(TVALID_out), .TLAST_out(TLAST_out));
 
