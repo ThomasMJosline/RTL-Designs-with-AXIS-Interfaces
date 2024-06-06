@@ -4,7 +4,7 @@ module AXI_mux_tb;
 
 reg ACLK;
 reg ARESETn;
-reg [7:0] a, b;
+reg [7:0] DATA_in_0, DATA_in_1;
 reg sel;
 reg TVALID_in_0, TVALID_in_1;
 reg TLAST_in_0, TLAST_in_1;
@@ -21,7 +21,7 @@ reg [4:0] count_1;
 
 
 
-AXI_mux mux_dut (.ACLK(ACLK), .ARESETn(ARESETn), .a(a), .b(b), .sel(sel), .DATA_out(DATA_out),
+AXI_mux mux_dut (.ACLK(ACLK), .ARESETn(ARESETn), .DATA_in_0(DATA_in_0), .DATA_in_0(DATA_in_1), .sel(sel), .DATA_out(DATA_out),
 .TVALID_in_0(TVALID_in_0), .TVALID_in_1(TVALID_in_1), .TLAST_in_0(TLAST_in_0), .TLAST_in_1(TLAST_in_1),
 .TREADY_in(TREADY_in), .TREADY_out(TREADY_out), .TVALID_out(TVALID_out), .TLAST_out(TLAST_out));
 
@@ -68,8 +68,8 @@ initial begin
 end
 
 always @(posedge ACLK) begin
-    a <= $random;
-    b <= $random;
+    DATA_in_0 <= $random;
+    DATA_in_1 <= $random;
     if (count_0 == 4'd7) begin
         TLAST_in_0 <= 1;
         count_0 <= 0;
