@@ -39,7 +39,7 @@ always @(posedge ACLK or negedge ARESETn) begin
             end
             else begin
                 if (TVALID_in_1 == 1) begin
-                    DATA_out = DATA_in_0;
+                    DATA_out = DATA_in_1;
                     TVALID_out = 1;
                     TLAST_out = TLAST_in_1;
                 end
