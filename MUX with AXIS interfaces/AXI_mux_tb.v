@@ -31,8 +31,8 @@ always #5 ACLK = ~ACLK;
 initial begin
      ACLK=0;
      ARESETn = 1; 
-     a = 0; TVALID_in_0 = 0; TLAST_in_0 = 0; count_0 = 0;
-     b = 64; TVALID_in_1 = 0; TLAST_in_1 = 0; count_1 = 0;
+     DATA_in_0 = 0; TVALID_in_0 = 0; TLAST_in_0 = 0; count_0 = 0;
+     DATA_in_1 = 64; TVALID_in_1 = 0; TLAST_in_1 = 0; count_1 = 0;
      sel = 0;
      TREADY_out = 0;
 
