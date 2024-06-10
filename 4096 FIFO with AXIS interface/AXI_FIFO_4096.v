@@ -1,6 +1,6 @@
 module AXI_FIFO_4096 (
     input aclk, aresetn,
-
+    
     output empty,
     output full,
 
