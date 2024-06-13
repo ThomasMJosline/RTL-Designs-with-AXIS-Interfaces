@@ -26,7 +26,7 @@ initial begin
     aclk = 0; aresetn = 1;  s_axis_tvalid = 0; m_axis_tready = 0; count = 0; s_axis_tlast = 0; s_axis_tdata = 0;
     
     #10 aresetn = 0;
-                                                    // ----------on reset s_axis_tready is high as the FIFO is empty
+                                                    // ----------on reset s_axis_tready is high as the reg is empty
                                                     //            it is ready to accept data 
     #10 aresetn = 1;
 
@@ -34,8 +34,8 @@ initial begin
                                                      //           data is stored into the reg
                                                      //            s_axis_tready becomes low
 
-    #10
-    s_axis_tvalid = 0;   s_axis_tdata = $random;     //------Data in the register is moved to output
+    #20
+    s_axis_tvalid = 0;   s_axis_tdata = $random;     //------data Transfer  to downstream slave happens
     m_axis_tready = 1;
 
     #10
@@ -48,15 +48,15 @@ initial begin
     #10
                         s_axis_tdata = $random;       // ------s_axis_tready is low, so no storing of new data
 
-    #10
-                                                        //---- read and write happens together
-    m_axis_tready = 1;
+    #20
+                                                        
+    m_axis_tready = 1;                                 // ------data Transfer  to downstream slave happens
 
     #10
 
-    m_axis_tready = 0;
+    m_axis_tready = 0;                                 // ----------- As s_axis_tvalid was high, data is stored in to reg
 
-    $stop;
+    $stop;                                              //----next posedge it comes to m_axis_tdata with m_axis_tvalid being high
 
 
 end
