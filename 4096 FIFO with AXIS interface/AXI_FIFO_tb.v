@@ -23,8 +23,9 @@ integer i;
 reg [3:0] count_last;
 
 
-always @(posedge aclk) begin
-    if (count_last == 4'd7) begin
+always #(10) begin
+    s_axis_tdata = $random;
+    if (count_last == 4'd6) begin
         s_axis_tlast <= 1;
         count_last <= 0;
     end
@@ -37,52 +38,57 @@ end
 
 initial begin
 
-aclk = 0; aresetn = 1; wr_en = 0; re_en = 0; s_axis_tdata = 0; s_axis_tvalid = 0; m_axis_tready = 0; s_axis_tlast = 0; count_last = 0;
+aclk = 1; aresetn = 1; wr_en = 0; re_en = 0; s_axis_tdata = 0; s_axis_tvalid = 0; m_axis_tready = 0;
+s_axis_tlast = 0; count_last = 0;
 
-#5 aresetn = 0;
+#5 aresetn = 0;                   // -----reseting using active low reset
 
-#10 aresetn = 1; wr_en = 1; 
+#10 aresetn = 1; 
 
-#15 s_axis_tvalid = 1;
+#500 wr_en = 1;       // -----write_enable is made high, but s_axis_tvalid is low
+                                  //                so no writing to fifo happens
 
-for (i = 0 ; i< 2060; i=i+1) begin
-    s_axis_tdata = i;
-    #10;
-end
+#2500 s_axis_tvalid = 1;          // -------s_axis_tvalid is made high,
+                                  //                so writing to fifo happes
 
-#10 re_en = 1; wr_en = 0;
+#25000 s_axis_tvalid = 0;          // -------s_axis_tvalid is made low 
+                                  //             so writing to fifo stops
 
-#20 m_axis_tready = 1;
+#10 re_en = 1; wr_en = 0;         // ------read_enable is made high, but m_axis_tready is low         write_enable made low
+                                  //             so read doesnot happen                                
 
-#20500 re_en = 0;
+#1000 m_axis_tready = 1;          // --------m_axis_tready is made high 
+                                  //         so reading starts
 
-#5 wr_en = 1;
+#20500 re_en = 0;                 // --------read_enable is made low
+                                  //          reading stops
 
-for (i = 0 ; i< 2000; i=i+1) begin
-    s_axis_tdata = i;
-    #10;
-end
+#6000 wr_en = 1;                    //-----write_enable is made high,  but s_axis_tvalid is low
+                                  //                so no writing to fifo happens
 
-#5 re_en = 1;
+#20500 re_en = 1;                    // ------read_enable is made high, m_axis_ready is high
+                                  //         so reading starts
 
-#5 wr_en = 0;
+s_axis_tvalid = 1;                // -------s_axis_tvalid is made high,
+                                  //                so writing to fifo happes
 
-for (i = 0 ; i< 2000; i=i+1) begin
-    s_axis_tdata = i;
-    #10;
-end
 
-#5 wr_en = 1;
+#6000 wr_en = 0;                     //-------write_enable is made low,
+                                   //          writing stops
 
-for (i = 0 ; i< 2000; i=i+1) begin
-    s_axis_tdata = i;
-    #10;
-end
+#20500
 
+m_axis_tready = 0;                 //---------m_axis_tready is made low
+                                   //          so reading stops        
+
+#6500
+wr_en = 1; re_en = 0;               //-----write_enable is made high, s_axis_tvalid is high
+                                    //     so writing starts
+#60500
 $stop;
 
 end
 
-always #10 aclk=~aclk;
+always #5 aclk=~aclk;
 
 endmodule
